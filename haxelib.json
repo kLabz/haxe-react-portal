@@ -1,0 +1,16 @@
+{
+  "name": "react-portal",
+  "license": "MIT",
+  "tags": [],
+  "description": "TODO",
+  "contributors": [
+    "klabz"
+  ],
+  "releasenote": "Initial release",
+  "version": "0.0.0",
+  "url": "https://github.com/kLabz/haxe-react-portal",
+  "classPath": "src",
+  "dependencies": {
+    "react-next": ""
+  }
+}

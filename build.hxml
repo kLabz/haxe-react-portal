@@ -1,0 +1,6 @@
+-cp src
+-lib react-next
+-js .build/lib.js
+-D no-compilation
+
+--macro include('react.portal', true)
