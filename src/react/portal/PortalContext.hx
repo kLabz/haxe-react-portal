@@ -1,8 +1,9 @@
 package react.portal;
 
 import react.React;
-import react.ReactMacro.jsx;
 import react.ReactComponent;
+import react.ReactContext;
+import react.ReactMacro.jsx;
 import react.ReactType;
 
 typedef PortalContextState = {
@@ -11,11 +12,12 @@ typedef PortalContextState = {
 }
 
 typedef PortalContextData = {
+	var currentOwner:Null<ReactComponent>;
 	var content:Map<String, ReactFragment>;
 }
 
 typedef PortalContextActions = {
-	var setContent:String->ReactFragment->Void;
+	var setContent:String->ReactComponent->ReactFragment->Void;
 }
 
 typedef PortalContextConsumerProps = {
@@ -27,13 +29,21 @@ typedef PortalContextProviderProps = {
 }
 
 class PortalContext {
-	public static var Consumer:ReactTypeOf<PortalContextConsumerProps>;
-	public static var Provider:ReactTypeOf<PortalContextProviderProps>;
+	public static var Context(get, null):ReactContext<PortalContextState>;
+	public static var Provider(get, null):ReactTypeOf<PortalContextProviderProps>;
+	public static var Consumer(get, null):ReactTypeOf<PortalContextConsumerProps>;
 
-	public static function init() {
-		var context = React.createContext();
-		Consumer = context.Consumer;
-		Provider = context.Provider;
+	static function get_Context() {ensureReady(); return Context;}
+	static function get_Provider() {ensureReady(); return Provider;}
+	static function get_Consumer() {ensureReady(); return Consumer;}
+
+	static function ensureReady() @:bypassAccessor {
+		if (Context == null) {
+			Context = React.createContext();
+			Context.displayName = "PortalContext";
+			Consumer = Context.Consumer;
+			Provider = Context.Provider;
+		}
 	}
 
 	public static function withContent<TProps:{}>(Comp:ReactType):ReactTypeOf<TProps> {

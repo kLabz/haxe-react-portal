@@ -6,11 +6,7 @@ import react.portal.PortalContext;
 typedef PortalContentProps = {
 	var target:String;
 	var children:ReactFragment;
-}
-
-private typedef Props = {
-	> PortalContentProps,
-	var setContent:String->ReactFragment->Void;
+	@:optional var alwaysClearOnUnmount:Bool;
 }
 
 private typedef State = {
@@ -18,27 +14,9 @@ private typedef State = {
 	var content:ReactFragment;
 }
 
-@:publicProps(PortalContentProps)
-@:wrap(PortalContext.withSetContent)
-class PortalContent extends ReactComponentOf<Props, State> {
-	static function getDerivedStateFromProps(
-		nextProps:Props,
-		state:State
-	):Null<Partial<State>> {
-		if (
-			nextProps.target == state.target
-			&& nextProps.children == state.content
-		) return null;
-
-		nextProps.setContent(nextProps.target, nextProps.children);
-
-		return {
-			target: nextProps.target,
-			content: nextProps.children
-		};
-	}
-
-	public function new(props:Props) {
+@:context(PortalContext.Context)
+class PortalContent extends ReactComponentOf<PortalContentProps, State> {
+	public function new(props:PortalContentProps) {
 		super(props);
 
 		state = {
@@ -48,9 +26,22 @@ class PortalContent extends ReactComponentOf<Props, State> {
 	}
 
 	override public function render():ReactFragment return null;
+	override public function componentDidMount() update();
+	override public function componentDidUpdate(_, _) update();
+
+	function update():Void {
+		if (props.target == state.target && props.children == state.content) return;
+		context.setContent(props.target, this, props.children);
+
+		setState({
+			target: props.target,
+			content: props.children
+		});
+	}
 
 	override public function componentWillUnmount():Void {
 		// TODO: This should only remove content this component owned
-		props.setContent(state.target, null);
+		if (context.currentOwner == this || props.alwaysClearOnUnmount)
+			context.setContent(state.target, this, null);
 	}
 }

@@ -13,13 +13,16 @@ class PortalProvider extends ReactComponentOf<Props, PortalContextData> {
 	public function new(_:Empty) {
 		super();
 
-		PortalContext.init();
-		state = {content: []};
+		state = {
+			content: [],
+			currentOwner: null
+		};
 	}
 
 	override public function render():ReactFragment {
 		var data:PortalContextState = {
 			content: state.content,
+			currentOwner: state.currentOwner,
 			setContent: setContent
 		};
 
@@ -30,7 +33,7 @@ class PortalProvider extends ReactComponentOf<Props, PortalContextData> {
 		);
 	}
 
-	function setContent(target:String, content:ReactFragment):Void {
+	function setContent(target:String, owner:ReactComponent, content:ReactFragment):Void {
 		setState(function(state) {
 			var oldContent = state.content.get(target);
 			if (oldContent == content) return null;
@@ -38,7 +41,7 @@ class PortalProvider extends ReactComponentOf<Props, PortalContextData> {
 			var newContent = state.content.copy();
 			newContent.set(target, content);
 
-			return {content: newContent};
+			return {content: newContent, currentOwner: owner};
 		});
 	}
 }
