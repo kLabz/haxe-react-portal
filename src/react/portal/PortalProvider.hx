@@ -14,15 +14,13 @@ class PortalProvider extends ReactComponentOf<Props, PortalContextData> {
 		super();
 
 		state = {
-			content: [],
-			currentOwner: null
+			content: []
 		};
 	}
 
 	override public function render():ReactFragment {
 		var data:PortalContextState = {
 			content: state.content,
-			currentOwner: state.currentOwner,
 			setContent: setContent
 		};
 
@@ -35,13 +33,25 @@ class PortalProvider extends ReactComponentOf<Props, PortalContextData> {
 
 	function setContent(target:String, owner:ReactComponent, content:ReactFragment):Void {
 		setState(function(state) {
-			var oldContent = state.content.get(target);
-			if (oldContent == content) return null;
+			var current = state.content.get(target);
+
+			if (current != null && current.owner == owner) {
+				if (React.isValidElement(content) && React.isValidElement(current.content)) {
+					if (ReactFastCompare.isEqual(current.content, content)) return null;
+				} else if (current.content == content) return null;
+			}
 
 			var newContent = state.content.copy();
-			newContent.set(target, content);
-
-			return {content: newContent, currentOwner: owner};
+			newContent.set(target, {content: content, owner: owner});
+			return {content: newContent};
 		});
 	}
+
+}
+
+// TODO: port to Haxe
+@:jsRequire("react-fast-compare")
+extern class ReactFastCompare {
+	@:selfCall
+	static function isEqual(a:Any, b:Any):Bool;
 }

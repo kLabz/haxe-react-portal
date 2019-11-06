@@ -1,6 +1,7 @@
 package react.portal;
 
 import react.ReactComponent;
+import react.portal.PortalContext.PortalContentData;
 
 typedef PortalContainerProps = {
 	var id:String;
@@ -8,7 +9,7 @@ typedef PortalContainerProps = {
 
 private typedef Props = {
 	> PortalContainerProps,
-	var content:Map<String, ReactFragment>;
+	var content:Map<String, PortalContentData>;
 }
 
 private typedef State = {
@@ -22,10 +23,15 @@ class PortalContainer extends ReactComponentOf<Props, State> {
 		nextProps:Props,
 		state:State
 	):Null<Partial<State>> {
-		var content = nextProps.content.get(nextProps.id);
-		if (content == state.content) return null;
+		var current = nextProps.content.get(nextProps.id);
 
-		return {content: content};
+		if (current == null) {
+			if (state.content == null) return null;
+			return {content: null};
+		}
+
+		if (current.content == state.content) return null;
+		return {content: current.content};
 	}
 
 	public function new(props:Props) {

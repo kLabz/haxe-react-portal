@@ -40,8 +40,9 @@ class PortalContent extends ReactComponentOf<PortalContentProps, State> {
 	}
 
 	override public function componentWillUnmount():Void {
-		// TODO: This should only remove content this component owned
-		if (context.currentOwner == this || props.alwaysClearOnUnmount)
+		var current = context.content.get(state.target);
+
+		if (current != null && (current.owner == this || props.alwaysClearOnUnmount))
 			context.setContent(state.target, this, null);
 	}
 }

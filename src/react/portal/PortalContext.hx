@@ -12,8 +12,7 @@ typedef PortalContextState = {
 }
 
 typedef PortalContextData = {
-	var currentOwner:Null<ReactComponent>;
-	var content:Map<String, ReactFragment>;
+	var content:Map<String, PortalContentData>;
 }
 
 typedef PortalContextActions = {
@@ -26,6 +25,11 @@ typedef PortalContextConsumerProps = {
 
 typedef PortalContextProviderProps = {
 	var value:PortalContextState;
+}
+
+typedef PortalContentData = {
+	var owner:ReactComponent;
+	var content:ReactFragment;
 }
 
 class PortalContext {
