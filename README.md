@@ -109,7 +109,7 @@ Available priorities are, from lowest to highest:
  * `Lower`
  * `Low`
  * `BelowAverage`
- * `Average`
+ * `Average` _(default priority)_
  * `AboveAverage`
  * `High`
  * `Higher`
