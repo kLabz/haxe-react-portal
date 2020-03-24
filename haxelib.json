@@ -1,13 +1,15 @@
 {
   "name": "react-portal",
   "license": "MIT",
-  "tags": [],
-  "description": "TODO",
+  "tags": [
+    "react"
+  ],
+  "description": "Render/overwrite content anywhere in your application.",
   "contributors": [
     "klabz"
   ],
   "releasenote": "Initial release",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "url": "https://github.com/kLabz/haxe-react-portal",
   "classPath": "src",
   "dependencies": {
