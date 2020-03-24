@@ -12,11 +12,11 @@ typedef PortalContextState = {
 }
 
 typedef PortalContextData = {
-	var content:Map<String, PortalContentData>;
+	var content:Map<String, PrioritizedData<PortalContentData>>;
 }
 
 typedef PortalContextActions = {
-	var setContent:String->ReactComponent->ReactFragment->Void;
+	var setContent:String->ReactComponent->ReactFragment->Priority->Void;
 }
 
 typedef PortalContextConsumerProps = {
@@ -50,6 +50,7 @@ class PortalContext {
 		}
 	}
 
+	// TODO: double-check external usage
 	public static function withContent<TProps:{}>(Comp:ReactType):ReactTypeOf<TProps> {
 		return function (props:TProps) {
 			return jsx(
@@ -65,7 +66,7 @@ class PortalContext {
 			return function (props:TProps) {
 				return jsx(
 					<Consumer>
-						{value -> <Comp {...props} hasContent={value.content.get(key) != null} />}
+						{value -> <Comp {...props} hasContent={value.content.exists(key) && value.content.get(key).hasContent()} />}
 					</Consumer>
 				);
 			}

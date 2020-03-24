@@ -31,18 +31,32 @@ class PortalProvider extends ReactComponentOf<Props, PortalContextData> {
 		);
 	}
 
-	function setContent(target:String, owner:ReactComponent, content:ReactFragment):Void {
+	function setContent(
+		target:String,
+		owner:ReactComponent,
+		content:ReactFragment,
+		priority:Priority
+	):Void {
 		setState(function(state) {
 			var current = state.content.get(target);
 
-			if (current != null && current.owner == owner) {
-				if (React.isValidElement(content) && React.isValidElement(current.content)) {
-					if (ReactFastCompare.isEqual(current.content, content)) return null;
-				} else if (current.content == content) return null;
+			if (current != null) {
+				var currentPriority = current.getPriority(priority);
+
+				if (currentPriority != null && currentPriority.owner == owner) {
+					if (React.isValidElement(content) && React.isValidElement(currentPriority.content)) {
+						if (ReactFastCompare.isEqual(currentPriority.content, content)) return null;
+					} else if (currentPriority.content == content) return null;
+				}
+
+				current = current.copyWith(priority, {owner: owner, content: content});
+			} else {
+				current = new PrioritizedData();
+				current.setPriority(priority, {owner: owner, content: content});
 			}
 
 			var newContent = state.content.copy();
-			newContent.set(target, {content: content, owner: owner});
+			newContent.set(target, current);
 			return {content: newContent};
 		});
 	}
