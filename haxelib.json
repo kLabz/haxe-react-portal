@@ -8,8 +8,8 @@
   "contributors": [
     "klabz"
   ],
-  "releasenote": "Initial release",
-  "version": "1.0.0",
+  "releasenote": "Removed bugged HOC",
+  "version": "1.1.0",
   "url": "https://github.com/kLabz/haxe-react-portal",
   "classPath": "src",
   "dependencies": {
