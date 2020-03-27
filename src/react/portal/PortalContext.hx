@@ -61,18 +61,6 @@ class PortalContext {
 		}
 	}
 
-	public static function withHasContent<TProps:{}>(key:String):ReactType->ReactTypeOf<TProps> {
-		return function (Comp:ReactType):ReactTypeOf<TProps> {
-			return function (props:TProps) {
-				return jsx(
-					<Consumer>
-						{value -> <Comp {...props} hasContent={value.content.exists(key) && value.content.get(key).hasContent()} />}
-					</Consumer>
-				);
-			}
-		}
-	}
-
 	public static function withSetContent<TProps:{}>(Comp:ReactType):ReactTypeOf<TProps> {
 		return function (props:TProps) {
 			return jsx(
