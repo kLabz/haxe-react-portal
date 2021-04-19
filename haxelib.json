@@ -8,8 +8,8 @@
   "contributors": [
     "klabz"
   ],
-  "releasenote": "Removed bugged HOC",
-  "version": "1.1.0",
+  "releasenote": "Allow setting fallback content from PortalContainer",
+  "version": "1.2.0",
   "url": "https://github.com/kLabz/haxe-react-portal",
   "classPath": "src",
   "dependencies": {

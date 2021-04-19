@@ -5,6 +5,7 @@ import react.portal.PortalContext.PortalContentData;
 
 typedef PortalContainerProps = {
 	var id:String;
+	@:optional var children:ReactFragment;
 }
 
 private typedef Props = {
@@ -42,5 +43,9 @@ class PortalContainer extends ReactComponentOf<Props, State> {
 	}
 
 	static function hasContent(c:PortalContentData):Bool return c.content != null;
-	override public function render():ReactFragment return state.content;
+	override public function render():ReactFragment {
+		var ret = state.content;
+		if (ret == null && props.children != null) return props.children;
+		return ret;
+	}
 }
